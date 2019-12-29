@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PersonResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"silpe", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"response Fail", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     public JsonObject personToJsonObj() {
         Person person = Person.getInstance();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id","asl3937");
+        jsonObject.addProperty("id","asd123");
         jsonObject.addProperty("weight", person.getWeight());
         jsonObject.addProperty("height", person.getHeight());
         jsonObject.addProperty("age", person.getAge());

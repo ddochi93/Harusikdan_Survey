@@ -112,8 +112,6 @@ public class ReportFragment extends Fragment {
             public void onDateClick(DateTime dateTime) {
                 Toast.makeText(getContext(),
                         "You Selected " + dateTime.toString(), Toast.LENGTH_SHORT).show();
-                mList.clear();  //리스트 내 아이템 전부 삭제.
-                mAdapter.notifyDataSetChanged();
                 JsonObject jsonObject = dateTimeToJsonObj(dateTime);
                 getDiaryList(jsonObject);
             }
@@ -135,18 +133,19 @@ public class ReportFragment extends Fragment {
             @Override
             public void onResponse(Call<DiaryList> call, Response<DiaryList> response) {
                 if (response.isSuccessful()) {
-
+                    mList.clear();  //리스트 내 아이템 전부 삭제.
+                    mAdapter.notifyDataSetChanged();
 
                     List<Diary> diary = response.body().getDiary();
 
-                    Log.e("ddd",diary.size()+"");
-                    for(int i = 0 ; i < diary.size() ; i++) {
+                    Log.e("ddd", diary.size() + "");
+                    for (int i = 0; i < diary.size(); i++) {
                         String foodName = diary.get(i).getEatFood();
                         String eatDate = diary.get(i).getEatDate();
                         String eatTime = diary.get(i).getEatTime();
                         String salt = diary.get(i).getFoodSalt();
-                        addItem(getResources().getDrawable(R.drawable.body),
-                                foodName, "식사 일시 : " + eatDate + " " + eatTime + "\n나트륨 함량 : " + salt);
+                        addItemByFoodName(foodName, eatDate, eatTime, salt);
+                        Log.e("ddd", i + "번쨰 돌아갑니다~");
                     }
                     mAdapter.notifyDataSetChanged();
 
@@ -190,6 +189,36 @@ public class ReportFragment extends Fragment {
         item.setDesc(desc);
 
         mList.add(item);
+    }
+
+    public void addItemByFoodName(String foodName, String eatDate, String eatTime, String salt) {
+  /*      addItem(getResources().getDrawable(R.drawable.body),
+                foodName, "식사 일시 : " + eatDate + " " + eatTime + "\n나트륨 함량 : " + salt);*/
+        int id = 0;
+        switch (foodName.trim()) {
+            case "순두부찌개":
+                id = R.drawable.softofu;
+                break;
+            case "라면":
+                id = R.drawable.ramen;
+                break;
+            case "짬뽕":
+                id = R.drawable.jjambong;
+                break;
+            case "자장면":
+                id = R.drawable.jajang;
+                break;
+            case "된장찌개":
+                id = R.drawable.doinjang;
+                break;
+            case "김치찌개":
+                id = R.drawable.kimchi;
+                break;
+            default:
+                id = R.drawable.ic_image;
+
+        }
+        addItem(getResources().getDrawable(id), foodName, "식사 일시 : " + eatDate + " " + eatTime + "\n나트륨 함량 : " + salt);
     }
 
 }
