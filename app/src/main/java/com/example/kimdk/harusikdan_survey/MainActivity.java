@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,17 +15,34 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.kimdk.harusikdan_survey.model.Person;
+import com.example.kimdk.harusikdan_survey.model.PersonResponse;
+import com.example.kimdk.harusikdan_survey.util.PersonAPI;
+import com.example.kimdk.harusikdan_survey.util.PersonUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+//import org.json.JSONObject;
+
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager vp;
     private static Person person;
     private Button mainButton;
+    private PersonUtil personUtil;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        personUtil = new PersonUtil();
         person = Person.getInstance();
         mainButton = findViewById(R.id.button);
 
@@ -35,16 +53,21 @@ public class MainActivity extends AppCompatActivity {
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("ddd","person의 weight = " + Person.getInstance().getWeight());
-                Log.d("ddd","person의 weight = " + Person.getInstance().getHeight());
-                Log.d("ddd","person의 age = " + Person.getInstance().getAge());
-                Log.d("ddd","persondml gender = " + Person.getInstance().isGender() );
-                Log.d("ddd","persond의 activity = " + Person.getInstance().getActivity() );
-                Log.d("ddd","persond의 illList = " + Person.getInstance().getDiseaseList() );
-                Log.d("ddd","persond의 preferred list = " + Person.getInstance().getPreferredList() );
-                Log.d("ddd","persond의 hate list = " + Person.getInstance().getHateList() );
+            /*    Log.d("ddd", "person의 weight = " + Person.getInstance().getWeight());
+                Log.d("ddd", "person의 weight = " + Person.getInstance().getHeight());
+                Log.d("ddd", "person의 age = " + Person.getInstance().getAge());
+                Log.d("ddd", "persondml gender = " + Person.getInstance().getGender());
+                Log.d("ddd", "persond의 activity = " + Person.getInstance().getActivity());
+                Log.d("ddd", "persond의 illList = " + Person.getInstance().getDiseaseList());
+                Log.d("ddd", "persond의 preferred list = " + Person.getInstance().getPreferredList());*/
+                Log.d("ddd", "persond의 hate list = " + Person.getInstance().getNonPreferredList().toArray().toString());
 
-                Intent intent = new Intent(getApplicationContext(),Main2Activity.class);
+                submitPerson();
+
+
+
+
+                Intent intent = new Intent(getApplicationContext(), Main3Activity.class);
                 startActivity(intent);
                 finish();
 
@@ -52,6 +75,78 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void submitPerson() {
+        Person person = Person.getInstance();
+
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(PersonAPI.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        JsonObject jsonObject = personToJsonObj();
+        Log.d("ddd",jsonObject.toString());
+
+        PersonAPI api = retrofit.create(PersonAPI.class);
+        Call<PersonResponse> call = api.postPerson(jsonObject);
+
+
+
+        call.enqueue(new Callback<PersonResponse>() {
+            @Override
+            public void onResponse(Call<PersonResponse> call, Response<PersonResponse> response) {
+                //Log.e("TEST ::", response.toString());
+                Log.e("TEST ::", response.raw().toString());
+                if(response.isSuccessful()) {
+                    Log.e("TEST ::", response.body().getHello());
+                    Toast.makeText(getApplicationContext(),"respone succeed", Toast.LENGTH_LONG).show();
+
+                }
+                else {
+                    Log.e("TEST ::", "response else");
+                    Toast.makeText(getApplicationContext(),"respone else", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PersonResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"silpe", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    public JsonObject personToJsonObj() {
+        Person person = Person.getInstance();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id","asl3937");
+        jsonObject.addProperty("weight", person.getWeight());
+        jsonObject.addProperty("height", person.getHeight());
+        jsonObject.addProperty("age", person.getAge());
+        jsonObject.addProperty("gender", person.getGender());
+        jsonObject.addProperty("activity", person.getActivity());
+
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < person.getDiseaseList().size(); i++) {
+            jsonArray.add(person.getDiseaseList().get(i));
+        }
+        jsonObject.add("diseaseList", jsonArray);
+
+
+        jsonArray = new JsonArray();
+        for (int i = 0; i < person.getPreferredList().size(); i++) {
+            jsonArray.add(person.getPreferredList().get(i));
+        }
+        jsonObject.add("preferredList", jsonArray);
+
+
+        jsonArray = new JsonArray();
+        for (int i = 0; i < person.getNonPreferredList().size(); i++) {
+            jsonArray.add(person.getNonPreferredList().get(i));
+        }
+        jsonObject.add("nonpreferredList", jsonArray);
+
+        return jsonObject;
     }
 
 /*        View.OnClickListener movePageListener = new View.OnClickListener()

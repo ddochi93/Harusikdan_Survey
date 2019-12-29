@@ -51,7 +51,7 @@ public class FourthFragement extends Fragment {
             public void onClick(View view) {
                 TextView tv = layout.findViewById(R.id.text_send);
                 tv.setText("male");
-                person.setGender(true);
+                person.setGender(0);
             }
         });
         female.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,7 @@ public class FourthFragement extends Fragment {
             public void onClick(View view) {
                 TextView tv = layout.findViewById(R.id.text_send);
                 tv.setText("female");
-                person.setGender(false);
+                person.setGender(1);
             }
         });
      /*   male.setOnTouchListener(new View.OnTouchListener() {

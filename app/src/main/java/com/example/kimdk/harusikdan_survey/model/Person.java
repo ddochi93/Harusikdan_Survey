@@ -7,13 +7,22 @@ public class Person {
     private static Person single_instance = null;
     private double weight;
     private double height;
-    private boolean gender;   //4th fragment
+    private int gender;   //4th fragment
     private int age;
     private int activity;  //5th fragment
     private int targetCalorie;  //이건 서버에서 자동 설정
     private List<Integer> diseaseList;
+
+    public int getTargetCalorie() {
+        return targetCalorie;
+    }
+
+    public void setTargetCalorie(int targetCalorie) {
+        this.targetCalorie = targetCalorie;
+    }
+
     private List<String> preferredList;
-    private List<String> hateList;
+    private List<String> nonPreferredList; //nonPreferredList
 
     public List<Integer> getDiseaseList() {
         return diseaseList;
@@ -38,12 +47,12 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
-//List<String> hatelist;
+//List<String> nonPreferredList;
 
     private Person() {
         diseaseList = new ArrayList<>();
         preferredList = new ArrayList<>();
-        hateList = new ArrayList<>();
+        nonPreferredList = new ArrayList<>();
     }
 
     public static Person getInstance() {
@@ -71,17 +80,17 @@ public class Person {
         this.height = height;
     }
 
-    public boolean isGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
     public void addDisease(Integer num) {
         //리스트에 중복을 피하기 위함.
-        if(diseaseList.contains(num) == false)
+        if (diseaseList.contains(num) == false)
             diseaseList.add(num);
     }
 
@@ -94,7 +103,7 @@ public class Person {
     }
 
     public void addPreferred(String foodName) {
-        if(preferredList.contains(foodName) == false)
+        if (preferredList.contains(foodName) == false)
             preferredList.add(foodName);
     }
 
@@ -107,14 +116,14 @@ public class Person {
     }
 
     public void addHate(String foodName) {
-        if(hateList.contains(foodName) == false)
-                hateList.add(foodName);
+        if (nonPreferredList.contains(foodName) == false)
+            nonPreferredList.add(foodName);
     }
 
     public void removeHate(String foodName) {
-        for (int i = 0; i < hateList.size(); i++) {
-            if (hateList.get(i).equals(foodName.trim())) {
-                hateList.remove(i);
+        for (int i = 0; i < nonPreferredList.size(); i++) {
+            if (nonPreferredList.get(i).equals(foodName.trim())) {
+                nonPreferredList.remove(i);
             }
         }
     }
@@ -127,11 +136,11 @@ public class Person {
         this.preferredList = preferredList;
     }
 
-    public List<String> getHateList() {
-        return hateList;
+    public List<String> getNonPreferredList() {
+        return nonPreferredList;
     }
 
-    public void setHateList(List<String> hateList) {
-        this.hateList = hateList;
+    public void setNonPreferredList(List<String> nonPreferredList) {
+        this.nonPreferredList = nonPreferredList;
     }
 }

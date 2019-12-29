@@ -85,7 +85,7 @@ public class EighthFragment extends Fragment {
                         break;
                 }
                 //Collections.sort(person.getDiseaseList());
-                tv.setText(person.getHateList().toString());
+                tv.setText(person.getNonPreferredList().toString());
             }
         };
 
