@@ -30,7 +30,7 @@ public class SecondFragment extends Fragment {
         nPicker = layout.findViewById(R.id.nPicker);
         nPicker.setMinValue(100);
         nPicker.setMaxValue(200);
-        nPicker.setValue(160);
+        nPicker.setValue(170);
         nPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {

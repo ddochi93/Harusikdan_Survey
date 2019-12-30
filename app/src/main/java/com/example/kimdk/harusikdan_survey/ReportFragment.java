@@ -37,27 +37,45 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ReportFragment extends Fragment {
+
     RecyclerView mRecyclerView = null;
     RecyclerImageTextAdapter mAdapter = null;
     ArrayList<RecyclerItem> mList = new ArrayList<RecyclerItem>();
 
-
+    private static ReportFragment single_instance = null;
     private WeekCalendar weekCalendar;
     private TextView totalCalorie;
     private TextView carbo;
     private TextView protein;
     private TextView fat;
     private TextView custom;
+    private LinearLayout layout;
 
     public ReportFragment() {
         // Required empty public constructor
     }
+/*
+    public static ReportFragment getInstance() {
+        if(single_instance == null) {
+            single_instance = new ReportFragment();
+        }
+        return single_instance;
+    }
+*/
 
+    @Override
+    public void onDestroyView() {
+        weekCalendar = null;
+        layout = null;
+        Log.e("ddd","디스트로이 호출됨");
+        super.onDestroyView();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +83,7 @@ public class ReportFragment extends Fragment {
         // Inflate the layout for this fragment
 
         /// 코드 계속 ...
-        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_report, container, false);
+        layout = (LinearLayout) inflater.inflate(R.layout.fragment_report, container, false);
         /////////////////////////////////////////////////////
         totalCalorie = layout.findViewById(R.id.totalCalorie);
    /*     totalCalorie.setText("ㅎㅎ");
@@ -117,7 +135,6 @@ public class ReportFragment extends Fragment {
             }
 
         });
-
         return layout;
     }
 
@@ -126,9 +143,8 @@ public class ReportFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         PersonAPI api = retrofit.create(PersonAPI.class);
+        Log.e("ddd", "date is " + date);
         Call<DiaryList> call = api.receiveDiary(date);
-
-
         call.enqueue(new Callback<DiaryList>() {
             @Override
             public void onResponse(Call<DiaryList> call, Response<DiaryList> response) {
@@ -151,14 +167,15 @@ public class ReportFragment extends Fragment {
 
 
                     Value value = response.body().getValue();
-                    totalCalorie.setText("총 섭취량 : " + value.getFoodKcal());
+                    totalCalorie.setText("남은 섭취량 : " + value.getFoodKcal());
                     carbo.setText("탄수화물 : " + value.getFoodCarbo());
                     protein.setText("단백질 : " + value.getFoodProtein());
                     fat.setText("지방 : " + value.getFoodFat());
-                    custom.setText("커스텀 : " + value.getFoodSalt());
+                    custom.setText("나르륨 : " + value.getFoodSalt());
 
 
                 } else {
+                    Log.e("ddd", response.raw().message());
                     Log.e("ddd", "응답 오긴 왔는데 이상한거 옴");
                 }
 

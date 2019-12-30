@@ -53,64 +53,39 @@ public class MainActivity extends AppCompatActivity {
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            /*    Log.d("ddd", "person의 weight = " + Person.getInstance().getWeight());
-                Log.d("ddd", "person의 weight = " + Person.getInstance().getHeight());
-                Log.d("ddd", "person의 age = " + Person.getInstance().getAge());
-                Log.d("ddd", "persondml gender = " + Person.getInstance().getGender());
-                Log.d("ddd", "persond의 activity = " + Person.getInstance().getActivity());
-                Log.d("ddd", "persond의 illList = " + Person.getInstance().getDiseaseList());
-                Log.d("ddd", "persond의 preferred list = " + Person.getInstance().getPreferredList());*/
-                Log.d("ddd", "persond의 hate list = " + Person.getInstance().getNonPreferredList().toArray().toString());
-
                 submitPerson();
-
-
-
-
                 Intent intent = new Intent(getApplicationContext(), Main3Activity.class);
                 startActivity(intent);
                 finish();
-
-
             }
         });
-
     }
 
     public void submitPerson() {
-        Person person = Person.getInstance();
-
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(PersonAPI.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         JsonObject jsonObject = personToJsonObj();
-        Log.d("ddd",jsonObject.toString());
-
         PersonAPI api = retrofit.create(PersonAPI.class);
         Call<PersonResponse> call = api.postPerson(jsonObject);
-
-
-
         call.enqueue(new Callback<PersonResponse>() {
             @Override
             public void onResponse(Call<PersonResponse> call, Response<PersonResponse> response) {
                 //Log.e("TEST ::", response.toString());
                 Log.e("TEST ::", response.raw().toString());
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Log.e("TEST ::", response.body().getHello());
-                    Toast.makeText(getApplicationContext(),"respone succeed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "respone succeed", Toast.LENGTH_LONG).show();
 
-                }
-                else {
+                } else {
                     Log.e("TEST ::", "response else");
-                    Toast.makeText(getApplicationContext(),"respone else", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "respone else", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<PersonResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"response Fail", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "response Fail", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -119,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     public JsonObject personToJsonObj() {
         Person person = Person.getInstance();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id","asd123");
+        jsonObject.addProperty("id", "test18");
         jsonObject.addProperty("weight", person.getWeight());
         jsonObject.addProperty("height", person.getHeight());
         jsonObject.addProperty("age", person.getAge());

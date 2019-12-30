@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:background="@color/colorPrimary"
-        app:numOfPages="150"
+        app:numOfPages="100"
         app:dayNameLength="threeLetters"
         app:daysBackgroundColor="#ffffff"
         app:daysTextColor="#000000"/>
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edge"
-        android:text="총 섭취량 9945/10000" />
+        android:text="남은 섭취량" />
 
 
     <LinearLayout

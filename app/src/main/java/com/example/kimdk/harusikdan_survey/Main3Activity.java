@@ -3,7 +3,6 @@ package com.example.kimdk.harusikdan_survey;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,7 +14,6 @@ public class Main3Activity extends AppCompatActivity {
     private ReportFragment reportFragment = new ReportFragment();
     private CaptureFragment captureFragment = new CaptureFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
-
 
 
     @Override
@@ -30,22 +28,23 @@ public class Main3Activity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
     }
 
-    class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener{
+    class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         public ItemSelectedListener() {
         }
 
         @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-            switch(menuItem.getItemId())
-            {
+            switch (menuItem.getItemId()) {
                 case R.id.report:
                     transaction.replace(R.id.content_main, reportFragment).commitAllowingStateLoss();
-
                     break;
                 case R.id.capture:
+                    //transaction.remove(reportFragment).commit();
                     transaction.replace(R.id.content_main, captureFragment).commitAllowingStateLoss();
+
+                //    fragmentManager.popBackStack();
                     break;
                 case R.id.profile:
                     transaction.replace(R.id.content_main, profileFragment).commitAllowingStateLoss();

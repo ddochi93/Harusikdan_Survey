@@ -73,12 +73,12 @@ public class CaptureFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        layout = (LinearLayout)inflater.inflate(R.layout.fragment_capture,container,false);
+        layout = (LinearLayout) inflater.inflate(R.layout.fragment_capture, container, false);
         rankFirst = layout.findViewById(R.id.first_rank);
         rankSeconds = layout.findViewById(R.id.second_rank);
         ImageView di;
 
-        gallery_preview = (ImageView)layout.findViewById(R.id.gallery_preview);
+        gallery_preview = (ImageView) layout.findViewById(R.id.gallery_preview);
         gallery_preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
@@ -128,7 +128,7 @@ public class CaptureFragment extends Fragment {
                 Uri bitmapUri = getImageUri(getContext(), bitmap);
 
                 //bitmap = resize(getApplicationContext(),bitmapUri,112);
-                bitmap = resizeBitmapImage(bitmap,300);
+                bitmap = resizeBitmapImage(bitmap, 300);
                 File f = null;
                 try {
                     f = createImageFile();
@@ -190,10 +190,10 @@ public class CaptureFragment extends Fragment {
             public void onResponse(Call<Food> call, Response<Food> response) {
                 Log.e("ddd", "yeah~");
                 Log.e("ddd", response.body().getFoodinfo().getFoodName() + "");
-                Log.e("ddd",response.raw().body().toString());
+                Log.e("ddd", response.raw().body().toString());
 
                 rankFirst.setText(response.body().getFoodinfo().getFoodName());
-                rankSeconds.setText(response.body().getList().get(1) + " " + response.body().getList().get(2)  + " " + response.body().getList().get(3));
+                rankSeconds.setText(response.body().getList().get(1) + " " + response.body().getList().get(2) + " " + response.body().getList().get(3));
             }
 
             @Override
@@ -306,34 +306,29 @@ public class CaptureFragment extends Fragment {
         }
         return resizeBitmap;
     }
+
     /**
      * Bitmap이미지의 가로, 세로 사이즈를 리사이징 한다.
      *
-     * @param source 원본 Bitmap 객체
+     * @param source        원본 Bitmap 객체
      * @param maxResolution 제한 해상도
      * @return 리사이즈된 이미지 Bitmap 객체
      */
-    public Bitmap resizeBitmapImage(Bitmap source, int maxResolution)
-    {
+    public Bitmap resizeBitmapImage(Bitmap source, int maxResolution) {
         int width = source.getWidth();
         int height = source.getHeight();
         int newWidth = width;
         int newHeight = height;
         float rate = 0.0f;
 
-        if(width > height)
-        {
-            if(maxResolution < width)
-            {
+        if (width > height) {
+            if (maxResolution < width) {
                 rate = maxResolution / (float) width;
                 newHeight = (int) (height * rate);
                 newWidth = maxResolution;
             }
-        }
-        else
-        {
-            if(maxResolution < height)
-            {
+        } else {
+            if (maxResolution < height) {
                 rate = maxResolution / (float) height;
                 newWidth = (int) (width * rate);
                 newHeight = maxResolution;
